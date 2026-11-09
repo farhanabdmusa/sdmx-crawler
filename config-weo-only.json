@@ -1,0 +1,32 @@
+{
+  "base_url": "https://api.imf.org/external/sdmx/3.0",
+  "agency_id": "IMF.RES",
+  "dataflow_ids": [
+    "WEO"
+  ],
+  "structure_types": [
+    "dataflow",
+    "datastructure",
+    "codelist",
+    "conceptscheme",
+    "agencyscheme",
+    "categoryscheme",
+    "categorisation",
+    "dataconstraint"
+  ],
+  "data_key": "*",
+  "data_partitions": [
+    {
+      "name": "all",
+      "params": {
+        "attributes": "dsd",
+        "measures": "all"
+      }
+    }
+  ],
+  "include_availability": true,
+  "output_dir": "output/weo-only",
+  "request_delay": 0.5,
+  "max_retries": 5,
+  "read_timeout": 120
+}

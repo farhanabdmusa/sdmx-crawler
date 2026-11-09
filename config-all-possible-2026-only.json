@@ -1,0 +1,31 @@
+{
+  "base_url": "https://api.imf.org/external/sdmx/3.0",
+  "agency_id": "*",
+  "dataflow_ids": [],
+  "structure_types": [
+    "dataflow",
+    "datastructure",
+    "codelist",
+    "conceptscheme",
+    "agencyscheme",
+    "categoryscheme",
+    "categorisation",
+    "dataconstraint"
+  ],
+  "data_key": "*",
+  "data_partitions": [
+    {
+      "name": "2026-only",
+      "params": {
+        "c[TIME_PERIOD]": "ge:2026-01-01+le:2026-12-31",
+        "attributes": "dsd",
+        "measures": "all"
+      }
+    }
+  ],
+  "include_availability": true,
+  "output_dir": "output/data-2026",
+  "request_delay": 0.5,
+  "max_retries": 5,
+  "read_timeout": 120
+}

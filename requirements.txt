@@ -1,0 +1,3 @@
+httpx>=0.27,<1.0
+openpyxl>=3.1      # untuk export_data.py --format xlsx
+pandas>=2.0        # untuk export_data.py --wide
