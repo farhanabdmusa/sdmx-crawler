@@ -149,7 +149,7 @@ def _fill_dim(row: dict, dim: dict, idx: int, labels: bool,
     if code is None and dim["id"] not in _WARNED_DIMS:
         _WARNED_DIMS.add(dim["id"])
         log.warning("Dimensi %s: nilai indeks %s tidak terbaca (item=%s). Jalankan "
-                    "`python export_data.py --inspect` dan kirim hasilnya.",
+                    "`python -m sdmx_crawler.export_data --inspect` dan kirim hasilnya.",
                     dim["id"], idx, json.dumps(item, ensure_ascii=False)[:200])
     row[dim["id"]] = code
     if labels:
@@ -477,6 +477,11 @@ def inspect_message(message: dict) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Konversi data SDMX-JSON ke CSV/XLSX")
+    add_arguments(ap)
+    return run(ap.parse_args(argv))
+
+
+def add_arguments(ap: argparse.ArgumentParser) -> None:
     ap.add_argument("--input", default="output/raw/data", help="Folder raw data (default: output/raw/data)")
     ap.add_argument("--out", default="output/export", help="Folder output (default: output/export)")
     ap.add_argument("--format", choices=["csv", "xlsx", "both"], default="csv")
@@ -486,8 +491,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--add-source", action="store_true", help="Tambah kolom source_file (nama partisi)")
     ap.add_argument("--inspect", action="store_true",
                     help="Diagnosis: cetak struktur file JSON pertama tiap dataflow lalu keluar")
-    args = ap.parse_args(argv)
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-7s %(message)s")
+
+
+def run(args: argparse.Namespace) -> int:
+    logging.basicConfig(
+        level=getattr(logging, getattr(args, "log_level", "INFO").upper()),
+        format="%(asctime)s %(levelname)-7s %(message)s")
 
     root = Path(args.input)
     if not root.is_dir():

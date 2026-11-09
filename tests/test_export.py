@@ -1,8 +1,8 @@
-"""Uji offline export_data.py dengan pesan SDMX-JSON 2.0 sintetis (dua partisi)."""
+"""Uji offline sdmx_crawler.export_data dengan pesan SDMX-JSON 2.0 sintetis (dua partisi)."""
 import csv, json, sys, tempfile
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import export_data
+from sdmx_crawler import export_data
 
 def message(years, idn, usa):
     return {"data": {

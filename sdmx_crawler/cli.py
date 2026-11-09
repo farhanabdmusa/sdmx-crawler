@@ -1,4 +1,4 @@
-"""CLI: discover | scrape | run | status"""
+"""CLI: discover | scrape | run | status | export"""
 from __future__ import annotations
 
 import argparse
@@ -8,6 +8,7 @@ import sys
 from .config import Config
 from .db import Database, DatabaseError
 from .discovery import Discovery
+from . import export_data
 from .fetcher import EndpointProcessor
 from .http_client import SdmxHttpClient
 from .scraper import Scraper
@@ -42,11 +43,15 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--purge-raw", action="store_true")
     st = sub.add_parser("status", help="Ringkasan status per resource_type")
     st.add_argument("--failed", action="store_true", help="Tampilkan juga daftar endpoint gagal + errornya")
+    export_data.add_arguments(sub.add_parser("export", help="Konversi data SDMX-JSON ke CSV/XLSX"))
     return p
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.command == "export":
+        return export_data.run(args)
+
     try:
         cfg = Config.load(args.config)
         setup_logging(cfg, args.log_level)

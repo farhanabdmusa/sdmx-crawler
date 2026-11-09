@@ -12,7 +12,8 @@ Fase 2  scrape    -> ambil payload tiap endpoint pending/failed -> raw/ + tabel 
 ```
 sdmx_scraper/
 ├── sdmx_crawler/          <- MODUL UTAMA (jalankan: python -m sdmx_crawler ...)
-│   ├── cli.py             perintah discover | scrape | run | status
+│   ├── cli.py             perintah discover | scrape | run | status | export
+│   ├── export_data.py     konversi JSON hasil scrape -> CSV/XLSX
 │   ├── discovery.py       Fase 1: katalog endpoint + manifest.ndjson
 │   ├── scraper.py         Fase 2: loop pending/failed, resume, Ctrl+C aman ga akan langsung abort command
 │   ├── fetcher.py         single worker: fetch -> simpan -> update status & log
@@ -21,13 +22,12 @@ sdmx_scraper/
 │   ├── storage.py         simpan file mentah + .meta.json
 │   ├── config.py, urls.py konfigurasi (termasuk default config) &  URL Builder
 │   ├── __init__.py, __main__.py   wajib ada (agar `python -m sdmx_crawler` jalan)
-├── export_data.py         skrip terpisah: JSON hasil scrape -> CSV/XLSX
 ├── config.example.json    salin menjadi config.json lalu sesuaikan
 ├── requirements.txt
 ├── README.md
 └── tests/                 OPSIONAL, hanya untuk verifikasi offline
     ├── smoke_test.py      uji crawler (server tiruan)
-    └── test_export.py     uji export_data.py
+    └── test_export.py     uji sdmx_crawler.export_data
 ```
 
 Folder `output/` dibuat otomatis saat dijalankan (database, katalog, file mentah, hasil export); bukan bagian dari kode. Tergantung dari `config - output_dir`.
@@ -142,7 +142,7 @@ Pengaman: jika listing dataflow atau listing tipe yang dipakai gagal (error jari
 tidak membatalkan refresh.
 
 `--purge-raw` juga menghapus file mentah (dan `.meta.json`) milik endpoint lama. Disarankan jika Anda
-menghapus/mengganti nama partisi, karena `export_data.py` menggabungkan semua file di folder versi
+menghapus/mengganti nama partisi, karena `sdmx_crawler.export_data` menggabungkan semua file di folder versi
 yang sama dan file partisi lama akan ikut terbawa. Tanpa `--purge-raw`, file lama dibiarkan di disk
 (akan tertimpa jika endpoint-nya diambil lagi).
 
@@ -202,13 +202,13 @@ Setelah mengubah partisi, jalankan `discover --refresh` lalu `scrape`. Tambahkan
 
 ## 8. Konversi data JSON ke CSV / XLSX
 
-Setelah `scrape`, ubah payload data (SDMX-JSON) menjadi tabel dengan `export_data.py`:
+Setelah `scrape`, ubah payload data (SDMX-JSON) menjadi tabel dengan modul ekspor:
 
 ```bash
-python export_data.py                              # CSV, satu baris per observasi
-python export_data.py --format xlsx --labels       # XLSX + kolom <DIM>_name dari label/codelist
-python export_data.py --format both --dataflow WEO
-python export_data.py --wide --format xlsx         # satu baris per series, kolom = tahun
+python -m sdmx_crawler export                              # CSV, satu baris per observasi
+python -m sdmx_crawler export --format xlsx --labels       # XLSX + kolom <DIM>_name dari label/codelist
+python -m sdmx_crawler export --format both --dataflow WEO
+python -m sdmx_crawler export --wide --format xlsx         # satu baris per series, kolom = tahun
 ```
 
 | Opsi                       | Fungsi                                                                                 |
