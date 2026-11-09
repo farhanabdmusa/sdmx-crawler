@@ -62,7 +62,7 @@ Lalu instal dependensi:
 pip install -r requirements.txt
 ```
 
-## 2. Menjalankan
+## 2. Run Crawling & Scraping
 
 ```bash
 cp config.example.json config.json        # opsional; tanpa argument -c akan mengambil semua possible data
