@@ -55,7 +55,7 @@ class Discovery:
     # -- listing ----------------------------------------------------------
     def _list_url(self, stype: str) -> str:
         agency = "*" if stype == "agencyscheme" else self.cfg.agency_id
-        params = {"detail": "allstubs"} if stype in self.cfg.stub_list_types else None
+        params = {"detail": "full"} if stype in self.cfg.stub_list_types else None
         return build_url(self.cfg.base_url, ["structure", stype, agency, "*", "+"], params)
 
     def _load_list(self, stype: str, force: bool) -> list[dict] | None:
