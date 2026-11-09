@@ -10,7 +10,7 @@ Fase 2  scrape    -> ambil payload tiap endpoint pending/failed -> raw/ + tabel 
 ## Struktur proyek (mana yang dipakai)
 
 ```
-sdmx_scraper/
+sdmx-crawler/
 ├── sdmx_crawler/          <- MODUL UTAMA (jalankan: python -m sdmx_crawler ...)
 │   ├── cli.py             perintah discover | scrape | run | status | export
 │   ├── export_data.py     konversi JSON hasil scrape -> CSV/XLSX
@@ -35,7 +35,7 @@ Folder `output/` dibuat otomatis saat dijalankan (database, katalog, file mentah
 ## 1. Setup (venv)
 
 ```bash
-cd sdmx_scraper
+cd sdmx-crawler
 python3 -m venv .venv
 ```
 
